@@ -1,7 +1,8 @@
 //----trzcionka 12
 //----algorytm wstecznej propagacji bledu
+
 clc;
-/*clear;
+clear;
 adresy=["A.png","B.png","C.png","D.png","E.png","F.png","G.png","H.png","I.png","J.png",...
 "K.png","L.png","M.png","N.png","O.png","P.png","R.png","S.png","T.png","U.png","W.png",...
 "Y.png","Z.png","am.png","bm.png","cm.png","dm.png","em.png","fm.png","gm.png","hm.png",...
@@ -47,13 +48,12 @@ end
 //DO TEJ PORY BYŁA OBRÓBKA TRENERÓW
 //----wykreslenie obszaru klasyfikacji
 Licz=0;
-IleKrokow=200;
-
+IleKrokow=80000;
 //----utworzenie odpowiednich tablic na dane
 
-//W1= zeros(w,w+1);//wagi
-//W2=zeros(p,w+1);//wagi
-//W3=zeros(wy,p+1);//wagi
+W1= zeros(w,w+1);//wagi
+W2=zeros(p,w+1);//wagi
+W3=zeros(wy,p+1);//wagi
 
     W1b=W1
     W2b=W2
@@ -79,7 +79,7 @@ ro=0.3;
     
 
 iteracja=0;
-//ER=zeros(IleKrokow);
+ER=zeros(IleKrokow);
 while(iteracja<IleKrokow)
 if iteracja>3
     if ER(iteracja)>ER(iteracja-1)
@@ -146,8 +146,9 @@ d3=zeros(1,wy);//współczynnik zmiany wagi
         F3(m)=U3(m)*(1-U3(m));
         d3(m)=(mat2(i,m)-U3(m))*F3(m);
     end   
-  
- 
+    if(d3(i)== 0)
+        continue;
+        end
     
     
     //----faza propagacji wstecz -warstwa posrednia
@@ -168,6 +169,7 @@ d3=zeros(1,wy);//współczynnik zmiany wagi
         d1(m)=d1(m)*F1(m)
     end
     //----uaktualnienie wag -warstwa wyjsciowa
+    
     W1b=W1
     W2b=W2
     W3b=W3
@@ -219,13 +221,14 @@ d3=zeros(1,wy);//współczynnik zmiany wagi
            end
     
 end
-*/
+
 adresy=["test1.png","test2.png","test3.png","test4.png","E.png","F.png","G.png","H.png","I.png","J.png",...
 "K.png","L.png","M.png","N.png","O.png","P.png","R.png","S.png","T.png","U.png","W.png",...
 "Y.png","Z.png","am.png","bm.png","cm.png","dm.png","em.png","fm.png","gm.png","hm.png",...
 "im.png","jm.png","km.png","lm.png","mm.png","nm.png","om.png","pm.png","rm.png","sm.png",...
 "tm.png","um.png","wm.png","ym.png","zm.png"]
-znaki=zeros(15,15,wy);
+rozmiar=size(adresy)
+znaki=zeros(15,15,rozmiar(2));
 for m=1:wy
 znak=imread(adresy(m))/255;
    a2=zeros(15,15);
@@ -236,13 +239,13 @@ znak=imread(adresy(m))/255;
         end
     end
 end
-mat=zeros(9,wy);
-mat2=zeros(wy,wy);
-for n=1:wy
+mat=zeros(9,rozmiar(2));
+mat2=zeros(rozmiar(2),rozmiar(2));
+for n=1:rozmiar(2)
     mat2(n,n)=1;
 end
 
-    for j=1:wy
+    for j=1:rozmiar(2)
         i=1;
         for m=1:5:15
             for n=1:5:15
@@ -311,8 +314,8 @@ znaki=string(znaki)
     znaki(45,1)="y";
     znaki(46,1)="z";
 
-    
-for q=1:wy
+
+for q=1:rozmiar(2)
 i=q;
 S1=zeros(1,w);//sumy
 S2=zeros(1,p);//sumy
